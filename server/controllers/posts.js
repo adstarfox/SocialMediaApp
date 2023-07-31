@@ -1,4 +1,4 @@
-module.export = {
+module.exports = {
     addPost: (req,res) => {
         console.log('addPost')
         res.sendStatus(200)
