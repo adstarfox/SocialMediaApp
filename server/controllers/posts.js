@@ -14,20 +14,64 @@ module.exports = {
             res.sendStatus(400)
         }
     },
-    getAllPosts: (req,res) => {
-        console.log('getAllPosts')
-        res.sendStatus(200)
+    getAllPosts: async (req,res) => {
+        try {
+            const posts = await Post.findAll({
+                where: {privateStatus: false},
+                include: [{
+                    model: User,
+                    required: true,
+                    attributes: ['username']
+                }]
+            })
+            res.status(200).send(posts)
+        } catch (error) {
+            console.log('ERROR in getAllPosts')
+            console.log(error)
+            res.sendStatus(400)
+        }
     },
-    getCurrentUserPosts: (req,res) => {
-        console.log('getCurrentUserPosts')
-        res.sendStatus(200)
+    getCurrentUserPosts: async (req,res) => {
+        try {
+            const {userId} = req.params
+            const posts = await Post.findAll({
+                where: {userId: userId},
+                include: [{
+                    model: User,
+                    required: true,
+                    attributes: ['username']
+                }]
+            })
+            res.status(200).send(posts)
+        } catch (error) {
+            console.log('ERROR in getCurrentUserPosts')
+            console.log(error)
+            res.sendStatus(400)
+        }
     },
-    editPost: (req,res) => {
-        console.log('editPost')
-        res.sendStatus(200)
+    editPost: async (req,res) => {
+        try {
+            const {id} = req.params
+            const {status} = req.body
+            await Post.update({privateStatus: status},{
+                where: {id: +id}
+            })
+            res.sendStatus(200)
+        }catch (error) {
+            console.log('ERROR in editPost')
+            console.log(error)
+            res.sendStatus(400)
+        }
     },
-    deletePost: (req,res) => {
-        console.log('deletePost')
-        res.sendStatus(200)
+    deletePost: async (req,res) => {
+        try {
+            const{id} = req.params
+            await Post.destroy({where: {id: +id}})
+            res.sendStatus(200)
+        }catch (error) {
+            console.log('ERROR on deletePost')
+            console.log(error)
+            res.sendStatus(400)
+        }
     }
 }

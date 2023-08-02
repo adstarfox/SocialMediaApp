@@ -35,6 +35,9 @@ const Header = () => {
                             <li>
                                 <NavLink style={styleActiveLink} to='auth'>Login or Register</NavLink>
                             </li>
+                            <li>
+                                <button className='logout-btn' onClick={() => dispatch({type: 'LOGOUT'})}>Logout</button>
+                            </li>
                         </ul>
                     ) : (
                         <ul className='main-nav'>
